@@ -6,147 +6,151 @@
   <!-- reset css -->
 
   <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css"
-    integrity="sha512-NmLkDIU1C/C88wi324HBc+S2kLhi08PN5GDeUVVVC/BVt/9Izdsc9SVeVfA1UZbY3sHUlDSyRXhCzHfr6hmPPw=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css"
+          integrity="sha512-NmLkDIU1C/C88wi324HBc+S2kLhi08PN5GDeUVVVC/BVt/9Izdsc9SVeVfA1UZbY3sHUlDSyRXhCzHfr6hmPPw=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer"
   />
 
   <script
-    type="text/javascript"
-    src="https://unpkg.com/@adobe/magento-storefront-events-sdk@qa/dist/index.js"
+          type="text/javascript"
+          src="https://unpkg.com/@adobe/magento-storefront-events-sdk@qa/dist/index.js"
   ></script>
 
   <script
-    type="text/javascript"
-    src="https://unpkg.com/@adobe/magento-storefront-event-collector@qa/dist/index.js"
+          type="text/javascript"
+          src="https://unpkg.com/@adobe/magento-storefront-event-collector@qa/dist/index.js"
   ></script>
 </head>
 
 <body>
-  <div class="search-plp-root"></div>
+<div class="search-plp-root"></div>
 
-  <style>
-    body {
-      margin: 0 auto;
-      max-width: 1280px;
-      padding-left: 20px;
-      padding-right: 20px;
-      font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      font-style: normal;
-      font-weight: 400;
-    }
+<style>
+  body {
+    margin: 0 auto;
+    max-width: 1280px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+  }
 
-    .ds-widgets {
-      --color-primary: black;
-    }
+  .ds-widgets {
+    --color-primary: black;
+  }
 
-    .ds-sdk-product-item__product-name {
-      text-transform: uppercase;
-    }
-  </style>
+  .ds-sdk-product-item__product-name {
+    text-transform: uppercase;
+  }
+</style>
 
-  <script type="text/javascript" src="search.js"></script>
+<script type="text/javascript" src="search.js"></script>
 
-  <script type="text/javascript">
-    const root = document.querySelector('div.search-plp-root');
-    const storeDetails = {
-      environmentId: '',
-      websiteCode: '',
-      storeCode: '',
-      storeViewCode: '',
-      config: {
-        minQueryLength: '2',
-        pageSize: 8,
-        perPageConfig: {
-          pageSizeOptions: '12,24,36',
-          defaultPageSizeOption: '24',
-        },
-        currencySymbol: '$',
-        currencyRate: '1',
-        displaySearchBox: true, // display search box
-        displayOutOfStock: true,
-        allowAllProducts: false,
-        // currentCategoryUrlPath?: '', // current category url path
-        // categoryName: '', // name of category to display
-        // displaySearchBox: false, // display search box
-        // displayOutOfStock: '', // "1" will return from php escapeJs and boolean is returned if called from data-service-graphql
-        // displayMode: '', // "" for search || "PAGE" for category search
-        // locale: '', //add locale for translations
-        // priceSlider: false, //enable slider for price - EXPERIMENTAL, default is false
-        // imageCarousel: false, //enable multiple image carousel - EXPERIMENTAL, default is false
-        // listview: false; //add listview as an option - EXPERIMENTAL, default is false
-        // optimizeImages: true, // optimize images with Fastly
-        // imageBaseWidth: 200,
-        // resolveCartId?: resolveCartId, // Luma specific addToCart method. Enabled with the extension
-        // refreshCart?: refreshCart, // Luma specific addToCart method. Enabled with the extension
-        // addToCart?: (sku, options, quantity)=>{} // custom add to cart callback function. Called on addToCart action
+<script type="text/javascript">
+  const root = document.querySelector('div.search-plp-root');
+  const storeDetails = {
+    environmentId: "e1107e5d-f382-4bf4-a073-db782e7a2b32",
+    websiteCode: 'hhus',
+    storeCode: 'hay_house_us',
+    storeViewCode: 'hhus',
+    config: {
+      minQueryLength: '2',
+      pageSize: 8,
+      perPageConfig: {
+        pageSizeOptions: '12,24,36',
+        defaultPageSizeOption: '24',
       },
-      context: {
-        customerGroup: '',
-      },
-      apiKey: '',
-      environmentType: '',
-      // searchQuery: 'search_query', // Optional: providing searchQuery will override 'q' query param
-      // route: ({ sku, urlKey  }) => {
-      //   const storeConfig = JSON.parse(
-      //     document
-      //       .querySelector("meta[name='store-config']")
-      //       .getAttribute('content')
-      //   );
-      //   const { storeRootUrl } = storeConfig;
-      //   const redirectUrl = storeRootUrl.split('.html')[0];
-      //   return `${redirectUrl}/${sku}`;
-      // },
-      // Will result to `http://localhost:8081/v1/MT11`
-    };
+      currencySymbol: '$',
+      currencyRate: '1',
+      displaySearchBox: true, // display search box
+      displayOutOfStock: true,
+      allowAllProducts: false,
+      // currentCategoryUrlPath?: '', // current category url path
+      // categoryName: '', // name of category to display
+      // displaySearchBox: false, // display search box
+      // displayOutOfStock: '', // "1" will return from php escapeJs and boolean is returned if called from data-service-graphql
+      // displayMode: '', // "" for search || "PAGE" for category search
+      // locale: '', //add locale for translations
+      // priceSlider: false, //enable slider for price - EXPERIMENTAL, default is false
+      // imageCarousel: false, //enable multiple image carousel - EXPERIMENTAL, default is false
+      // listview: false; //add listview as an option - EXPERIMENTAL, default is false
+      // optimizeImages: true, // optimize images with Fastly
+      // imageBaseWidth: 200,
+      // resolveCartId?: resolveCartId, // Luma specific addToCart method. Enabled with the extension
+      // refreshCart?: refreshCart, // Luma specific addToCart method. Enabled with the extension
+      // addToCart?: (sku, options, quantity)=>{} // custom add to cart callback function. Called on addToCart action
+    },
+    context: {
+      customerGroup: '',
+    },
+    // Confusingly, apiKey is not actually used. 
+    apiKey: 'storefront-widgets',
+    // For testing, we set environmentType to 'testing'
+    environmentType: 'testing',
+    // searchQuery: 'search_query', // Optional: providing searchQuery will override 'q' query param
+    // route: ({ sku, urlKey  }) => {
+    //   const storeConfig = JSON.parse(
+    //     document
+    //       .querySelector("meta[name='store-config']")
+    //       .getAttribute('content')
+    //   );
+    //   const { storeRootUrl } = storeConfig;
+    //   const redirectUrl = storeRootUrl.split('.html')[0];
+    //   return `${redirectUrl}/${sku}`;
+    // },
+    // Will result to `http://localhost:8081/v1/MT11`
+  };
 
-    const mse = window.magentoStorefrontEvents;
+  // The following are for Magento Storefront Events only. Search itself does not depend on them.
+  const mse = window.magentoStorefrontEvents;
 
-    mse.context.setMagentoExtension({
-      magentoExtensionVersion: '1.0.0',
-    });
-    mse.context.setSearchExtension({
-      version: '2.0.3',
-    });
-    mse.context.setShopper({ shopperId: 'logged-in' });
+  mse.context.setMagentoExtension({
+    magentoExtensionVersion: '1.0.0',
+  });
+  mse.context.setSearchExtension({
+    version: '2.0.3',
+  });
+  mse.context.setShopper({ shopperId: 'logged-in' });
 
-    mse.context.setPage({
-      pageType: 'plp',
-      maxXOffset: 0,
-      maxYOffset: 0,
-      minXOffset: 0,
-      minYOffset: 0,
-      ping_interval: 5,
-      pings: 1,
-    });
+  mse.context.setPage({
+    pageType: 'plp',
+    maxXOffset: 0,
+    maxYOffset: 0,
+    minXOffset: 0,
+    minYOffset: 0,
+    ping_interval: 5,
+    pings: 1,
+  });
 
-    mse.context.setStorefrontInstance({
-      environmentId: '',
-      instanceId: 'bbbbbb',
-      environment: 'ccccccc',
-      storeUrl: '',
-      websiteId: 123456,
-      websiteCode: '',
-      storeId: 123456,
-      storeCode: '',
-      storeViewId: 123456,
-      storeViewCode: '',
-      websiteName: '',
-      storeName: '',
-      storeViewName: '',
-      baseCurrencyCode: 'USD',
-      storeViewCurrencyCode: 'USD',
-      catalogExtensionVersion: '1.0.0',
-    });
+  mse.context.setStorefrontInstance({
+    "storeUrl": "https:\/\/hayhouse.test\/",
+    "websiteId": 1,
+    "websiteCode": "hhus",
+    "storeId": 1,
+    "storeCode": "hay_house_us",
+    "storeViewId": 1,
+    "storeViewCode": "hhus",
+    "websiteName": "Hay House US",
+    "storeName": "Hay House US",
+    "storeViewName": "Hay House US",
+    "baseCurrencyCode": "USD",
+    "storeViewCurrencyCode": "USD",
+    "catalogExtensionVersion": "103.4.17",
+    "environmentId": "e1107e5d-f382-4bf4-a073-db782e7a2b32",
+    "environment": "Testing",
+    "storefrontTemplate": "Luma"
+  });
 
-    setTimeout(async () => {
-      while (typeof window.LiveSearchPLP !== 'function') {
-        console.log('waiting for window.LiveSearchPLP to be available');
-        await new Promise((resolve) => setTimeout(resolve, 500));
-      }
-      window.LiveSearchPLP({ storeDetails, root });
-    }, 1000);
-  </script>
+  // Initialize the PLP
+  setTimeout(async () => {
+    while (typeof window.LiveSearchPLP !== 'function') {
+      console.log('waiting for window.LiveSearchPLP to be available');
+      await new Promise((resolve) => setTimeout(resolve, 500));
+    }
+    window.LiveSearchPLP({ storeDetails, root });
+  }, 1000);
+</script>
 </body>

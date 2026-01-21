@@ -86,30 +86,21 @@ import the script:
 
 ### Setup the Store Details:
 
-Most of these will be passed with the extension if you have your storefront setup. The SANDBOX_KEY (api key for the sandbox env) is the only key that will need to be set within webpack.
+Variables are set in the Commerce page that includes search.js, sets the storeDetails object, and calls the LiveSearchPLP function to render the PLP. 
 
-#### Store Variables needed:
+For testing, we set our variables in the ```storeDetails``` object in ```dev-template.html```, which is compiled to ```/dist/index.html``` when the application is built.
 
-```sh
-ENVIRONMENT_ID
-WEBSITE_CODE
-STORE_CODE
-STORE_VIEW_CODE
-CUSTOMER_GROUP_CODE
-API_KEY
-SANDBOX_KEY # input this key into webpack.dev.js & webpack.prod.js
-```
+#### Example Store Details:
 
-- To set up sandbox keys please see here: https://experienceleague.adobe.com/docs/commerce-merchant-services/catalog-service/installation.html?lang=en
-
-#### insert into store details config
+(Also see dev-template.html for full example.)
 
 ```ts
 const storeDetails = {
   environmentId: 'ENVIRONMENT_ID',
   websiteCode: 'WEBSITE_CODE',
   storeCode: 'STORE_CODE',
-  storeViewCode: 'STORE_VIEW_CODE',
+  storeViewCode: 'STORE_VIEW_CODE', 
+  apiKey: 'storefront-widgets',
   config: {
     minQueryLength: '2',
     pageSize: 8,
@@ -150,7 +141,7 @@ const storeDetails = {
   context: {
     customerGroup: 'CUSTOMER_GROUP_CODE',
   },
-  apiKey: 'API_KEY',
+
 };
 ```
 

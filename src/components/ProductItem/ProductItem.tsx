@@ -89,6 +89,38 @@ export const ProductItem: FunctionComponent<ProductProps> = ({
     setRefinedProduct(data);
     setCarouselIndex(0);
   };
+  
+  const getAttributeValue = (attributeName: string) => {
+    return productView.attributes?.find((attr) => attr.name === attributeName)?.value;
+  };
+  
+  const getFormatIcon = () => {
+    const formatIcon = getAttributeValue('format_icon');
+    return (formatIcon) ? ('/media/wysiwyg/' + formatIcon ) : null;
+  };
+  
+  const getIsNew = () => {
+    const newFrom =  getAttributeValue('news_from_date');
+    const newTill =  getAttributeValue('news_to_date');
+    const today = new Date();
+    console.log(newFrom, newTill, today);
+    return (newFrom && newTill) ? today >= new Date(newFrom) && today <= new Date(newTill) : false;
+  }
+  
+  const getBadge = () => {
+    let badgeText = null;
+    if (getIsNew()) {
+      badgeText = 'New Release';
+    } else if (getAttributeValue('bestseller') == 'yes'){
+      badgeText = 'Bestseller';
+    } else if (getAttributeValue('payment_plan_available')) {
+      badgeText = 'Payment Plan Available';
+    }
+    if (badgeText) {
+      return '<div class="tag">' + badgeText + '</div>';
+    }
+    return null;
+  };
 
   const isSelected = (id: string) => {
     const selected = selectedSwatch ? selectedSwatch === id : false;
@@ -280,7 +312,7 @@ export const ProductItem: FunctionComponent<ProductProps> = ({
               </div>
             </div>
           ) : (
-            <div className="product-add-to-cart" />
+              <div className="product-add-to-cart">Out of Stock</div>
           )}
         </div>
       </>
@@ -302,6 +334,7 @@ export const ProductItem: FunctionComponent<ProductProps> = ({
         className="!text-primary hover:no-underline hover:text-primary"
       >
         <div className="ds-sdk-product-item__main relative flex flex-col justify-between h-full">
+          <div dangerouslySetInnerHTML={{__html: getBadge()}} />
           <div className="ds-sdk-product-item__image relative w-full h-full rounded-md overflow-hidden">
             {productImageArray.length ? (
               <ImageCarousel
@@ -322,8 +355,17 @@ export const ProductItem: FunctionComponent<ProductProps> = ({
           </div>
           <div className="flex flex-row">
             <div className="flex flex-col">
+              <div className="ds-sdk-product-item__product-format mt-md text-sm text-primary">
+                {getFormatIcon()? (
+                  <img src="{getFormatIcon()}"/>
+                ): null}
+                <div>{getAttributeValue('format')}</div>
+              </div>
               <div className="ds-sdk-product-item__product-name mt-md text-sm text-primary">
                 {product.name !== null && htmlStringDecode(product.name)}
+              </div>
+              <div className="ds-sdk-product-item__product-author mt-md text-sm text-primary">
+                {getAttributeValue('authors')}
               </div>
               <ProductPrice
                 item={refinedProduct ?? item}
@@ -380,7 +422,13 @@ export const ProductItem: FunctionComponent<ProductProps> = ({
           )}
         </div>
       ) : (
-        <div className="pb-4 mt-sm" />
+          <div className="pb-4 mt-sm" >
+            {screenSize.mobile && <AddToCartButton onClick={handleAddToCart} />}
+            {screenSize.tablet && <AddToCartButton onClick={handleAddToCart} />}
+            {isHovering && screenSize.desktop && (
+                <div>Out of Stock</div>
+              )}
+              </div>
       )}
     </div>
   );

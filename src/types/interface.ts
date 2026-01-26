@@ -175,6 +175,7 @@ export interface Product {
     uid: string;
     name: string;
     sku: string;
+    authors: string;
     description: null | ComplexTextValue;
     short_description: null | ComplexTextValue;
     attribute_set_id: null | number;
@@ -216,6 +217,7 @@ export interface Product {
     new_to_date: null | string;
     created_at: null | string;
     updated_at: null | string;
+    attributes: Array<Attribute>;
     price: {
       final: ProductViewPrice;
       regular: ProductViewPrice;
@@ -265,6 +267,7 @@ export interface RefinedProduct {
     new_to_date: null | string;
     created_at: null | string;
     updated_at: null | string;
+    attributes: Array<Attribute>;
     price: {
       final: ProductViewPrice;
       regular: ProductViewPrice;
@@ -341,6 +344,11 @@ export interface SwatchValues {
 
 export interface CustomAttribute {
   code: string;
+  value: string;
+}
+
+export interface Attribute {
+  name: string;
   value: string;
 }
 

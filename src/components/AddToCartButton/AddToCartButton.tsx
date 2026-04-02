@@ -25,12 +25,8 @@ export const AddToCartButton: FunctionComponent<AddToCartButtonProps> = ({
     <div className="ds-sdk-add-to-cart-button">
       <button
         className="flex items-center justify-center text-white text-sm rounded-full h-[32px] w-full p-sm"
-        style={{
-          'background-color': `#464646`,
-        }}
         onClick={onClick}
       >
-        <CartIcon className="w-[24px] pr-4" />
         {btnLabel}
       </button>
     </div>

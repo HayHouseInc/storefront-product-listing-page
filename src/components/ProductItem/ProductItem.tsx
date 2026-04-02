@@ -91,19 +91,35 @@ export const ProductItem: FunctionComponent<ProductProps> = ({
   };
   
   const getAttributeValue = (attributeName: string) => {
-    return productView.attributes?.find((attr) => attr.name === attributeName)?.value;
+    const value = productView.attributes?.find((attr) => attr.name === attributeName)?.value;
+    return (value === null || value === '') ? null : value;
   };
   
   const getFormatIcon = () => {
     const formatIcon = getAttributeValue('format_icon');
-    return (formatIcon) ? ('/media/wysiwyg/' + formatIcon ) : null;
+    return (formatIcon) ? ('/media/wysiwyg/' + formatIcon ) : '';
   };
+  
+  const getFormat = () => {
+    return getAttributeValue('format');
+  }
+  const getAuthors = () => {
+    return getAttributeValue('authors');
+  }
+  
+  const getEBookUrl = () => {
+    const externalUrl = getAttributeValue('external_url');
+    const kindleUrl = getAttributeValue('kindle_url');
+    const ibooksUrl = getAttributeValue('ibooks_url');
+    const nookUrl = getAttributeValue('nook_url');
+    const itunesUrl = getAttributeValue('itunes_url');
+    return externalUrl || kindleUrl || ibooksUrl || nookUrl || itunesUrl;
+  }
   
   const getIsNew = () => {
     const newFrom =  getAttributeValue('news_from_date');
     const newTill =  getAttributeValue('news_to_date');
     const today = new Date();
-    console.log(newFrom, newTill, today);
     return (newFrom && newTill) ? today >= new Date(newFrom) && today <= new Date(newTill) : false;
   }
   
@@ -117,10 +133,18 @@ export const ProductItem: FunctionComponent<ProductProps> = ({
       badgeText = 'Payment Plan Available';
     }
     if (badgeText) {
-      return '<div class="tag">' + badgeText + '</div>';
+      return '<div class="product-tag detail"><span>' + badgeText + '</span></div>';
     }
     return null;
   };
+  
+  const getContentType = () => {
+    return getAttributeValue('product_content_type');
+  }
+  
+  const getExternalUrl = () => {
+    return getAttributeValue('external_url');
+  }
 
   const isSelected = (id: string) => {
     const selected = selectedSwatch ? selectedSwatch === id : false;
@@ -331,11 +355,12 @@ export const ProductItem: FunctionComponent<ProductProps> = ({
       <a
         href={productUrl as string}
         onClick={onProductClick}
-        className="!text-primary hover:no-underline hover:text-primary"
+        className="!text-primary hover:no-underline hover:text-primary product"
       >
-        <div className="ds-sdk-product-item__main relative flex flex-col justify-between h-full">
-          <div dangerouslySetInnerHTML={{__html: getBadge()}} />
+        <div className="ds-sdk-product-item__main product-item-details relative flex flex-col justify-between h-full product-list-item">
+          <div className="product-tag wrapper" dangerouslySetInnerHTML={{__html: getBadge()}} />
           <div className="ds-sdk-product-item__image relative w-full h-full rounded-md overflow-hidden">
+            <div className="product-img-wrap">
             {productImageArray.length ? (
               <ImageCarousel
                 images={
@@ -352,20 +377,21 @@ export const ProductItem: FunctionComponent<ProductProps> = ({
                 className={`max-h-[45rem] w-full object-cover object-center lg:w-full`}
               />
             )}
+            </div>
           </div>
           <div className="flex flex-row">
             <div className="flex flex-col">
-              <div className="ds-sdk-product-item__product-format mt-md text-sm text-primary">
-                {getFormatIcon()? (
-                  <img src="{getFormatIcon()}"/>
-                ): null}
-                <div>{getAttributeValue('format')}</div>
+              {getFormatIcon() && getFormat() ? (
+              <div className="format-type">
+                  <img src={getFormatIcon()}/>
+                <span>{getAttributeValue('format')}</span>
               </div>
-              <div className="ds-sdk-product-item__product-name mt-md text-sm text-primary">
+              ): null}
+              <div className="ds-sdk-product-item__product-name mt-md text-sm text-primary product-item-name">
                 {product.name !== null && htmlStringDecode(product.name)}
               </div>
-              <div className="ds-sdk-product-item__product-author mt-md text-sm text-primary">
-                {getAttributeValue('authors')}
+              <div className="ds-sdk-product-item__product-author mt-md text-sm text-primary expert detail">
+                {getAuthors}
               </div>
               <ProductPrice
                 item={refinedProduct ?? item}
@@ -413,23 +439,27 @@ export const ProductItem: FunctionComponent<ProductProps> = ({
           )}
         </div>
       )}
-      {productView.inStock ? (
         <div className="pb-4 mt-sm">
-          {screenSize.mobile && <AddToCartButton onClick={handleAddToCart} />}
-          {screenSize.tablet && <AddToCartButton onClick={handleAddToCart} />}
-          {isHovering && screenSize.desktop && (
-            <AddToCartButton onClick={handleAddToCart} />
+          { getEBookUrl() ? (
+              <a href={productUrl as string}>
+                <button>
+                  View Details
+                </button>
+              </a>
+          ) : getExternalUrl() ? (
+              <a href={getExternalUrl() as string}>
+                <button>
+                  View Details
+                </button>
+              </a>
+          ) : (
+              productView.inStock ? (
+                <AddToCartButton onClick={handleAddToCart} />
+              ) : (
+                <div className="out-of-stock">Out of Stock</div>
+              )
           )}
         </div>
-      ) : (
-          <div className="pb-4 mt-sm" >
-            {screenSize.mobile && <AddToCartButton onClick={handleAddToCart} />}
-            {screenSize.tablet && <AddToCartButton onClick={handleAddToCart} />}
-            {isHovering && screenSize.desktop && (
-                <div>Out of Stock</div>
-              )}
-              </div>
-      )}
     </div>
   );
 };

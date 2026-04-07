@@ -21,7 +21,7 @@ export const SelectedFilters: FunctionComponent = ({}) => {
   return (
     <div className="w-full h-full">
       {searchCtx.filters?.length > 0 && (
-        <div className="ds-plp-facets__pills pb-6 sm:pb-6 flex flex-wrap mt-8 justify-start">
+        <div className="ds-plp-facets__pills pb-6 sm:pb-6 flex flex-wrap mt-8 justify-start"> 
           {searchCtx.filters.map((filter) => (
             <div key={filter.attribute}>
               {filter.in?.map((option) => (

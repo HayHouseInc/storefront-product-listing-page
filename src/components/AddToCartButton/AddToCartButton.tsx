@@ -10,7 +10,6 @@ it.
 import { FunctionComponent } from 'preact';
 
 import { useTranslation } from '../../context/translation';
-import CartIcon from '../../icons/cart.svg';
 
 export interface AddToCartButtonProps {
   onClick: (e: any) => any;

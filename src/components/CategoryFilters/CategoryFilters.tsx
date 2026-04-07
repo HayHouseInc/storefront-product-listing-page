@@ -13,6 +13,7 @@ import { useTranslation } from '../../context/translation';
 import { Facet } from '../../types/interface';
 import { Facets } from '../Facets';
 import { FilterButton } from '../FilterButton';
+import { SelectedFilters } from '../../components/Facets';
 
 interface CategoryFiltersProps {
   loading: boolean;
@@ -46,11 +47,12 @@ export const CategoryFilters: FunctionComponent<CategoryFiltersProps> = ({
   const results = resultsTranslation.replace('{totalCount}', `${totalCount}`);
 
   return (
-    <div class="sm:flex ds-widgets-_actions relative max-w-[21rem] w-full h-full px-2 flex-col overflow-y-auto">
-      <div className="ds-widgets_actions_header flex justify-between items-center mb-md">
-        {title && <span> {title}</span>}
-        {!loading && <span className="text-primary text-sm">{results}</span>}
+    <div class="sm:flex ds-widgets-_actions relative w-full h-full px-2 flex-col overflow-y-auto">
+      <div className="ds-widgets_actions_header">
+        Filter Options
       </div>
+      
+      <SelectedFilters />
 
       {!pageLoading && facets.length > 0 && (
         <>

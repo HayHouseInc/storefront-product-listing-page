@@ -104,7 +104,11 @@ export const ProductItem: FunctionComponent<ProductProps> = ({
     return getAttributeValue('format');
   }
   const getAuthors = () => {
-    return getAttributeValue('authors');
+    let authors = getAttributeValue('authors');
+    if (Array.isArray(authors)) {
+      return authors.join(', ');
+    }
+    return authors;
   }
   
   const getEBookUrl = () => {
@@ -391,7 +395,7 @@ export const ProductItem: FunctionComponent<ProductProps> = ({
                 {product.name !== null && htmlStringDecode(product.name)}
               </div>
               <div className="ds-sdk-product-item__product-author mt-md text-sm text-primary expert detail">
-                {getAuthors}
+                {getAuthors()}
               </div>
               <ProductPrice
                 item={refinedProduct ?? item}

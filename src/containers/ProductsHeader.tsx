@@ -52,8 +52,10 @@ export const ProductsHeader: FunctionComponent<Props> = ({
   const translation = useTranslation();
 
   const [showMobileFacet, setShowMobileFacet] = useState(
-    !!productsCtx.variables.filter?.length
+      //!!productsCtx.variables.filter?.length
+      false
   );
+  
   const [sortOptions, setSortOptions] = useState(defaultSortOptions());
 
   const getSortOptions = useCallback(() => {
@@ -84,9 +86,12 @@ export const ProductsHeader: FunctionComponent<Props> = ({
   };
 
   return (
-    <div className="flex flex-col max-w-5xl lg:max-w-full ml-auto w-full h-full">
+    <div className="flex justify-between w-full flex-wrap">
+      {!screenSize.mobile && (
+          <div className={`total-results`}>{totalCount} items</div>
+      )}
       <div
-        className={`flex gap-x-2.5 mb-[1px] ${
+        className={`flex gap-x-2.5 mb-[1px] w-full ${
           screenSize.mobile ? 'justify-between' : 'justify-end'
         }`}
       >

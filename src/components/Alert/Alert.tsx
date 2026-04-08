@@ -32,7 +32,7 @@ export const Alert: FunctionComponent<AlertProps> = ({
   onClick,
 }) => {
   return (
-    <div className="mx-auto max-w-8xl">
+    <div className="mx-auto max-w-8xl alert">
       {(() => {
         switch (type) {
           case 'error':

@@ -91,8 +91,8 @@ export const ProductsHeader: FunctionComponent<Props> = ({
           <div className={`total-results`}>{totalCount} items</div>
       )}
       <div
-        className={`flex gap-x-2.5 mb-[1px] w-full ${
-          screenSize.mobile ? 'justify-between' : 'justify-end'
+        className={`flex gap-x-2.5 mb-[1px] ${
+          screenSize.mobile ? 'justify-between w-full' : 'justify-end'
         }`}
       >
         <div>

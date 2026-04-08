@@ -129,11 +129,11 @@ export const ProductItem: FunctionComponent<ProductProps> = ({
   
   const getBadge = () => {
     let badgeText = null;
-    if (getIsNew()) {
+    if (getIsNew() == 'yes') {
       badgeText = 'New Release';
     } else if (getAttributeValue('bestseller') == 'yes'){
       badgeText = 'Bestseller';
-    } else if (getAttributeValue('payment_plan_available')) {
+    } else if (getAttributeValue('payment_plan_available') == 'yes') {
       badgeText = 'Payment Plan Available';
     }
     if (badgeText) {

@@ -128,16 +128,17 @@ export const ProductItem: FunctionComponent<ProductProps> = ({
   }
   
   const getBadge = () => {
-    let badgeText = null;
-    if (getIsNew() == 'yes') {
+    let badgeText = '';
+    if (getIsNew()) {
       badgeText = 'New Release';
     } else if (getAttributeValue('bestseller') == 'yes'){
       badgeText = 'Bestseller';
     } else if (getAttributeValue('payment_plan_available') == 'yes') {
       badgeText = 'Payment Plan Available';
     }
+    const className = badgeText.toLowerCase().replace(/ /g, '-');
     if (badgeText) {
-      return '<div class="product-tag detail"><span>' + badgeText + '</span></div>';
+      return '<div class="product-tag detail ' + className + '"><span>' + badgeText + '</span></div>';
     }
     return null;
   };
@@ -349,7 +350,7 @@ export const ProductItem: FunctionComponent<ProductProps> = ({
 
   return (
     <div
-      className="ds-sdk-product-item group relative flex flex-col max-w-sm justify-between h-full hover:border-[1.5px] border-solid hover:shadow-lg border-offset-2 p-2"
+      className="ds-sdk-product-item product-item group relative flex flex-col max-w-sm justify-between h-full hover:border-[1.5px] border-solid hover:shadow-lg border-offset-2 p-2"
       style={{
         'border-color': '#D5D5D5',
       }}
@@ -362,7 +363,9 @@ export const ProductItem: FunctionComponent<ProductProps> = ({
         className="!text-primary hover:no-underline hover:text-primary product"
       >
         <div className="ds-sdk-product-item__main product-item-details relative flex flex-col justify-between h-full product-list-item">
-          <div className="product-tag wrapper" dangerouslySetInnerHTML={{__html: getBadge()}} />
+          {getBadge() !== '' ? (
+            <div dangerouslySetInnerHTML={{__html: getBadge()}}/>
+          ): null}
           <div className="ds-sdk-product-item__image relative w-full h-full rounded-md overflow-hidden">
             <div className="product-img-wrap">
             {productImageArray.length ? (
@@ -396,6 +399,25 @@ export const ProductItem: FunctionComponent<ProductProps> = ({
               </div>
               <div className="ds-sdk-product-item__product-author mt-md text-sm text-primary expert detail">
                 {getAuthors()}
+              </div>
+              <div className="product-description text-sm text-primary mt-xs">
+                <a
+                    href={productUrl as string}
+                    onClick={onProductClick}
+                    className="!text-primary hover:no-underline hover:text-primary"
+                >
+                  {product.short_description?.html ? (
+                      <>
+                  <span
+                      dangerouslySetInnerHTML={{
+                        __html: (product.short_description.html.replace(/<[^>]*>/g, '').substring(0, 45) + (product.short_description.html.replace(/<[^>]*>/g, '').length > 45 ? '...' : '')),
+                      }}
+                  />
+                      </>
+                  ) : (
+                      <span />
+                  )}
+                </a>
               </div>
               <ProductPrice
                 item={refinedProduct ?? item}
@@ -443,15 +465,21 @@ export const ProductItem: FunctionComponent<ProductProps> = ({
           )}
         </div>
       )}
-        <div className="pb-4 mt-sm">
+        <div className="pb-4 mt-sm add-to-cart">
           { getEBookUrl() ? (
-              <a href={productUrl as string}>
+              <a href={productUrl as string} className="button ebook-url">
                 <button>
                   View Details
                 </button>
               </a>
           ) : getExternalUrl() ? (
-              <a href={getExternalUrl() as string}>
+              <a href={getExternalUrl() as string} className="button external-url">
+                <button>
+                  View Details
+                </button>
+              </a>
+          ) : product.__typename === 'ConfigurableProduct' ? (
+              <a href={product.canonical_url as string} className="button view-details">
                 <button>
                   View Details
                 </button>

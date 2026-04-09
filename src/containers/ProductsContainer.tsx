@@ -135,9 +135,9 @@ export const ProductsContainer: FunctionComponent<Props> = ({
         />
       )}
       <div
-        className={`flex flex-row justify-between max-w-full ${
+        className={`bottom-toolbar flex flex-row max-w-full ${
           showFilters ? 'mx-auto' : 'mr-auto'
-        } w-full h-full`}
+        } ${ screenSize.mobile ? 'flex-wrap justify-center' : 'justify-between' } w-full h-full`}
       >
         <div>
           {getPageSizeTranslation(pageSize, pageSizeOptions, PerPagePicker)}

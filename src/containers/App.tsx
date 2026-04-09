@@ -118,7 +118,7 @@ export const App: FunctionComponent = () => {
                   screenSize.mobile ? (
                     <Loading label={loadingLabel} />
                   ) : (
-                    <Shimmer />
+                      <Loading label={loadingLabel} />
                   )
                 ) : (
                   <>

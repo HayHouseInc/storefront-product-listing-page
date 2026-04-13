@@ -117,6 +117,10 @@ const REFINE_PRODUCT_QUERY = `
             inStock
             url
             urlKey
+            attributes {
+                name
+                value
+            }
             images {
                 label
                 url

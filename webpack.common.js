@@ -7,7 +7,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const lumaPort = 8081;
 const PORT = process.env.PORT || lumaPort;
 
-const banner = `${pkg.name}@v${pkg.version}`;
+const banner = `Exported from https://github.com/HayHouseInc/storefront-product-listing-page/. See repo for details.\n\n${pkg.name}@v${pkg.version}`;
 const MAJOR_VERSION = `v${pkg.version.split('.')[0]}`;
 
 const publicPaths = {

@@ -103,6 +103,12 @@ export const ProductItem: FunctionComponent<ProductProps> = ({
   const getFormat = () => {
     return getAttributeValue('format');
   }
+  
+  const getFormatClassName = () => {
+    const format = getFormat();
+    return format ? format.toLowerCase().replace(/ /g, '-') : '';
+  };
+  
   const getAuthors = () => {
     let authors = getAttributeValue('authors');
     if (Array.isArray(authors)) {
@@ -388,10 +394,10 @@ export const ProductItem: FunctionComponent<ProductProps> = ({
           </div>
           <div className="flex flex-row">
             <div className="flex flex-col">
-              {getFormatIcon() && getFormat() ? (
-              <div className="format-type">
-                  <img src={getFormatIcon()}/>
-                <span>{getAttributeValue('format')}</span>
+              {getFormat() ? (
+              <div className={`format-type ${getFormatClassName()}`}>
+                <img src={getFormatIcon()} alt={"getFormat()"}/>
+                <span>{getFormat()}</span>
               </div>
               ): null}
               <div className="ds-sdk-product-item__product-name mt-md text-sm text-primary product-item-name">

@@ -53,16 +53,47 @@ const getSortOptionsfromMetadata = (
       ) {
         if (e.numeric && e.attribute.includes('price')) {
           sortOptions.push({
-            label: `${e.label}: Low to High`,
+            label: `${e.label} (Low - High`,
             value: `${e.attribute}_ASC`,
           });
           sortOptions.push({
-            label: `${e.label}: High to Low`,
+            label: `${e.label} (High - Low)`,
+            value: `${e.attribute}_DESC`,
+          });
+        } else if (e.attribute.includes('product_name')) {
+          sortOptions.push({
+            label: `${e.label} (A - Z)`,
+            value: `${e.attribute}_ASC`,
+          });
+          sortOptions.push({
+            label: `${e.label} (Z - A)`,
+            value: `${e.attribute}_DESC`,
+          });
+        } else if (e.attribute.includes('pub_date')) {
+          sortOptions.push({
+            label: `${e.label} (Old - New)`,
+            value: `${e.attribute}_ASC`,
+          });
+          sortOptions.push({
+            label: `${e.label} (New - Old)`,
+            value: `${e.attribute}_DESC`,
+          });
+        } else if (e.attribute.includes('start')) {
+          sortOptions.push({
+            label: `${e.label} (Soon - Late)`,
+            value: `${e.attribute}_ASC`,
+          });
+          sortOptions.push({
+            label: `${e.label} (Late - Soon)`,
             value: `${e.attribute}_DESC`,
           });
         } else {
           sortOptions.push({
-            label: `${e.label}`,
+            label: `${e.label} (Asc)`,
+            value: `${e.attribute}_ASC`,
+          });
+          sortOptions.push({
+            label: `${e.label} (Desc)`,
             value: `${e.attribute}_DESC`,
           });
         }

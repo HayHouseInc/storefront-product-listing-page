@@ -139,16 +139,16 @@ export const ProductsContainer: FunctionComponent<Props> = ({
           showFilters ? 'mx-auto' : 'mr-auto'
         } ${ screenSize.mobile ? 'flex-wrap justify-center' : 'justify-between' } w-full h-full`}
       >
+        {totalPages > 1 && (
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={goToPage}
+            />
+        )}
         <div>
           {getPageSizeTranslation(pageSize, pageSizeOptions, PerPagePicker)}
         </div>
-        {totalPages > 1 && (
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={goToPage}
-          />
-        )}
       </div>
     </>
   );

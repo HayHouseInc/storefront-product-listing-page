@@ -49,7 +49,7 @@ export const CategoryFilters: FunctionComponent<CategoryFiltersProps> = ({
   return (
     <div class="sm:flex ds-widgets-_actions relative w-full h-full px-2 flex-col overflow-y-auto">
       <div className="ds-widgets_actions_header">
-        Filter Options
+        Filters
       </div>
       
       <SelectedFilters />

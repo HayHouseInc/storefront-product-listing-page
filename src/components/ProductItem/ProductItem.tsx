@@ -396,7 +396,7 @@ export const ProductItem: FunctionComponent<ProductProps> = ({
             <div className="flex flex-col">
               {getFormat() ? (
               <div className={`format-type ${getFormatClassName()}`}>
-                <img src={getFormatIcon()} alt={"getFormat()"}/>
+                <img src={getFormatIcon()} alt={`${getFormat()}`}/>
                 <span>{getFormat()}</span>
               </div>
               ): null}

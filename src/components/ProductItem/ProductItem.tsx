@@ -8,7 +8,7 @@ it.
 */
 
 import { FunctionComponent } from 'preact';
-import { useState } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 
 import '../ProductItem/ProductItem.css';
 
@@ -31,15 +31,17 @@ import { ImageCarousel } from '../ImageCarousel';
 import { SwatchButtonGroup } from '../SwatchButtonGroup';
 import ProductPrice from './ProductPrice';
 
+const ADD_TO_CART_SUCCESS_DISPLAY_DELAY = 4000;
+const ADD_TO_CART_ERROR_MESSAGE =
+  'Something went wrong trying to add an item to your cart.';
+
 export interface ProductProps {
   item: Product;
   currencySymbol: string;
   currencyRate?: string;
   setRoute?: RedirectRouteFunc | undefined;
   refineProduct: (optionIds: string[], sku: string) => any;
-  setCartUpdated: (cartUpdated: boolean) => void;
-  setItemAdded: (itemAdded: string) => void;
-  setError: (error: boolean) => void;
+  onAddToCartError?: (message: string) => void;
   addToCart?: (
     sku: string,
     options: [],
@@ -53,9 +55,7 @@ export const ProductItem: FunctionComponent<ProductProps> = ({
   currencyRate,
   setRoute,
   refineProduct,
-  setCartUpdated,
-  setItemAdded,
-  setError,
+  onAddToCartError,
   addToCart,
 }: ProductProps) => {
   const { product, productView } = item;
@@ -66,6 +66,8 @@ export const ProductItem: FunctionComponent<ProductProps> = ({
   >();
   const [refinedProduct, setRefinedProduct] = useState<RefinedProduct>();
   const [isHovering, setIsHovering] = useState(false);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [isAddToCartSuccessful, setIsAddToCartSuccessful] = useState(false);
   const { addToCartGraphQL, refreshCart } = useCart();
   const { viewType } = useProducts();
   const {
@@ -73,6 +75,20 @@ export const ProductItem: FunctionComponent<ProductProps> = ({
   } = useStore();
 
   const { screenSize } = useSensor();
+
+  useEffect(() => {
+    if (!isAddToCartSuccessful) {
+      return;
+    }
+
+    const successTimer = window.setTimeout(() => {
+      setIsAddToCartSuccessful(false);
+    }, ADD_TO_CART_SUCCESS_DISPLAY_DELAY);
+
+    return () => {
+      window.clearTimeout(successTimer);
+    };
+  }, [isAddToCartSuccessful]);
 
   const handleMouseOver = () => {
     setIsHovering(true);
@@ -207,31 +223,44 @@ export const ProductItem: FunctionComponent<ProductProps> = ({
     : product?.canonical_url;
 
   const handleAddToCart = async () => {
-    setError(false);
-    if (isSimple || isVirtual) {
-      if (addToCart) {
-        //Custom add to cart function passed in
-        await addToCart(productView.sku, [], 1);
-      } else {
-        // Add to cart using GraphQL & Luma extension
-        const response = await addToCartGraphQL(productView.sku);
+    if (isAddingToCart) {
+      return;
+    }
 
-        if (
-          response?.errors ||
-          response?.data?.addProductsToCart?.user_errors.length > 0
-        ) {
-          setError(true);
-          return;
+    setIsAddToCartSuccessful(false);
+    if (isSimple || isVirtual) {
+      setIsAddingToCart(true);
+      try {
+        if (addToCart) {
+          //Custom add to cart function passed in
+          await addToCart(productView.sku, [], 1);
+        } else {
+          // Add to cart using GraphQL & Luma extension
+          const response = await addToCartGraphQL(productView.sku);
+
+          if (
+            response?.errors ||
+            response?.data?.addProductsToCart?.user_errors?.length > 0
+          ) {
+            onAddToCartError && onAddToCartError(ADD_TO_CART_ERROR_MESSAGE);
+            return;
+          }
+
+          refreshCart && refreshCart();
         }
 
-        setItemAdded(product.name);
-        refreshCart && refreshCart();
-        setCartUpdated(true);
+        setIsAddToCartSuccessful(true);
+      } catch (error) {
+        onAddToCartError && onAddToCartError(ADD_TO_CART_ERROR_MESSAGE);
+      } finally {
+        setIsAddingToCart(false);
       }
     } else if (productUrl) {
       window.open(productUrl, '_self');
     }
   };
+
+  const badge = getBadge();
 
   if (listview && viewType === 'listview') {
     return (
@@ -342,9 +371,13 @@ export const ProductItem: FunctionComponent<ProductProps> = ({
           {/* TO BE ADDED LATER */}
           <div className="product-ratings" />
           {productView.inStock ? (
-            <div className="product-add-to-cart">
-              <div className="pb-4 h-[38px] w-96">
-                <AddToCartButton onClick={handleAddToCart} />
+            <div className="product-add-to-cart add-to-cart">
+              <div className="pb-4 w-96">
+                <AddToCartButton
+                  onClick={handleAddToCart}
+                  loading={isAddingToCart}
+                  success={isAddToCartSuccessful}
+                />
               </div>
             </div>
           ) : (
@@ -370,9 +403,7 @@ export const ProductItem: FunctionComponent<ProductProps> = ({
         className="!text-primary hover:no-underline hover:text-primary product"
       >
         <div className="ds-sdk-product-item__main product-item-details relative flex flex-col justify-between h-full product-list-item">
-          {getBadge() !== '' ? (
-            <div dangerouslySetInnerHTML={{__html: getBadge()}}/>
-          ): null}
+          {badge ? <div dangerouslySetInnerHTML={{ __html: badge }} /> : null}
           <div className="ds-sdk-product-item__image relative w-full h-full rounded-md overflow-hidden">
             <div className="product-img-wrap">
             {productImageArray.length ? (
@@ -493,7 +524,13 @@ export const ProductItem: FunctionComponent<ProductProps> = ({
               </a>
           ) : (
               productView.inStock ? (
-                <AddToCartButton onClick={handleAddToCart} />
+                <>
+                  <AddToCartButton
+                    onClick={handleAddToCart}
+                    loading={isAddingToCart}
+                    success={isAddToCartSuccessful}
+                  />
+                </>
               ) : (
                 <div className="out-of-stock">Out of Stock</div>
               )

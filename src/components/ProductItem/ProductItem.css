@@ -47,6 +47,11 @@
   justify-content: end;
 }
 
+.add-to-cart button:disabled {
+  cursor: wait;
+  opacity: 0.75;
+}
+
 @media screen and (max-width: 767px) {
   .grid-container {
     display: grid;

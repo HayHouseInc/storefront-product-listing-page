@@ -9,7 +9,7 @@ it.
 
 import { FunctionComponent } from 'preact';
 import { HTMLAttributes } from 'preact/compat';
-import { useEffect, useState } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 
 import './product-list.css';
 
@@ -18,6 +18,11 @@ import { useProducts, useStore } from '../../context';
 import { Product } from '../../types/interface';
 import { classNames } from '../../utils/dom';
 import ProductItem from '../ProductItem';
+
+type AddToCartError = {
+  id: number;
+  message: string;
+};
 
 export interface ProductListProps extends HTMLAttributes<HTMLDivElement> {
   products: Array<Product> | null | undefined;
@@ -36,24 +41,34 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
     currencyRate,
     setRoute,
     refineProduct,
-    refreshCart,
     addToCart,
   } = productsCtx;
-  const [cartUpdated, setCartUpdated] = useState(false);
-  const [itemAdded, setItemAdded] = useState('');
   const { viewType } = useProducts();
-  const [error, setError] = useState<boolean>(false);
   const {
     config: { listview },
   } = useStore();
+  const [addToCartError, setAddToCartError] =
+    useState<AddToCartError | null>(null);
+  const addToCartErrorRef = useRef<HTMLDivElement>(null);
 
   const className = showFilters
     ? 'ds-sdk-product-list bg-body max-w-full pl-3 pb-2xl sm:pb-24'
     : 'ds-sdk-product-list bg-body w-full mx-auto pb-2xl sm:pb-24';
 
   useEffect(() => {
-    refreshCart && refreshCart();
-  }, [itemAdded]);
+    if (!addToCartError) {
+      return;
+    }
+
+    window.scrollTo(0, 0);
+  }, [addToCartError]);
+
+  const handleAddToCartError = (message: string) => {
+    setAddToCartError((current) => ({
+      id: (current?.id ?? 0) + 1,
+      message,
+    }));
+  };
 
   return (
     <div
@@ -62,41 +77,28 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
         className
       )}
     >
-      {cartUpdated && (
-        <div className="mt-8">
+      {addToCartError && (
+        <div ref={addToCartErrorRef} className="mt-8 mb-4">
           <Alert
-            title={`You added ${itemAdded} to your shopping cart.`}
-            type="success"
-            description=""
-            onClick={() => setCartUpdated(false)}
-          />
-        </div>
-      )}
-      {error && (
-        <div className="mt-8">
-          <Alert
-            title={`Something went wrong trying to add an item to your cart.`}
+            title={addToCartError.message}
             type="error"
             description=""
-            onClick={() => setError(false)}
+            onClick={() => setAddToCartError(null)}
           />
         </div>
       )}
-
       {listview && viewType === 'listview' ? (
         <div className="w-full">
           <div className="ds-sdk-product-list__list-view-default mt-md grid grid-cols-none pt-[15px] w-full gap-[10px]">
             {products?.map((product) => (
               <ProductItem
                 item={product}
-                setError={setError}
                 key={product?.productView?.id}
                 currencySymbol={currencySymbol}
                 currencyRate={currencyRate}
                 setRoute={setRoute}
                 refineProduct={refineProduct}
-                setCartUpdated={setCartUpdated}
-                setItemAdded={setItemAdded}
+                onAddToCartError={handleAddToCartError}
                 addToCart={addToCart}
               />
             ))}
@@ -112,14 +114,12 @@ export const ProductList: FunctionComponent<ProductListProps> = ({
           {products?.map((product) => (
             <ProductItem
               item={product}
-              setError={setError}
               key={product?.productView?.id}
               currencySymbol={currencySymbol}
               currencyRate={currencyRate}
               setRoute={setRoute}
               refineProduct={refineProduct}
-              setCartUpdated={setCartUpdated}
-              setItemAdded={setItemAdded}
+              onAddToCartError={handleAddToCartError}
               addToCart={addToCart}
             />
           ))}

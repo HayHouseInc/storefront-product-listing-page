@@ -193,6 +193,7 @@ export const ProductItem: FunctionComponent<ProductProps> = ({
   const isGrouped = product?.__typename === 'GroupedProduct';
   const isGiftCard = product?.__typename === 'GiftCardProduct';
   const isConfigurable = product?.__typename === 'ConfigurableProduct';
+  const isVirtual = product?.__typename === 'VirtualProduct';
 
   const onProductClick = () => {
     window.magentoStorefrontEvents?.publish.searchProductClick(
@@ -207,7 +208,7 @@ export const ProductItem: FunctionComponent<ProductProps> = ({
 
   const handleAddToCart = async () => {
     setError(false);
-    if (isSimple) {
+    if (isSimple || isVirtual) {
       if (addToCart) {
         //Custom add to cart function passed in
         await addToCart(productView.sku, [], 1);

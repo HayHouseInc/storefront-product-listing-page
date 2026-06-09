@@ -248,8 +248,9 @@ export const ProductItem: FunctionComponent<ProductProps> = ({
 
           refreshCart && refreshCart();
         }
-
-        setIsAddToCartSuccessful(true);
+        setIsAddingToCart(false);
+        window.location.href = '/checkout/cart;'
+        //setIsAddToCartSuccessful(true);
       } catch (error) {
         onAddToCartError && onAddToCartError(ADD_TO_CART_ERROR_MESSAGE);
       } finally {

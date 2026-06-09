@@ -249,7 +249,7 @@ export const ProductItem: FunctionComponent<ProductProps> = ({
           refreshCart && refreshCart();
         }
         setIsAddingToCart(false);
-        window.location.href = '/checkout/cart;'
+        window.location.href = '/checkout/cart'
         //setIsAddToCartSuccessful(true);
       } catch (error) {
         onAddToCartError && onAddToCartError(ADD_TO_CART_ERROR_MESSAGE);
